@@ -16,11 +16,8 @@ jobs:
 
       - name: Fix broken repositories
         run: |
-          # حذف ریپازیتوری مرده mint.splunk.com
-          sed -i '/mint.splunk.com/d' build.gradle
+          sed -i '/mint.splunk.com/d' build.gradle || true
           sed -i '/mint.splunk.com/d' app/build.gradle || true
-          
-          # اطمینان از وجود JitPack
           if ! grep -q "jitpack.io" build.gradle; then
             sed -i '/repositories {/a\        maven { url "https://jitpack.io" }' build.gradle
           fi
@@ -31,17 +28,18 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Android SDK
+      - name: Setup Android SDK (without default packages)
         uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools'
 
-      - name: Accept licenses and install packages
+      - name: Install required packages
         run: |
-          yes | sdkmanager --licenses > /dev/null || true
+          yes | sdkmanager --licenses || true
           sdkmanager "platforms;android-34"
           sdkmanager "build-tools;34.0.0"
           sdkmanager "ndk;26.2.11394342"
           sdkmanager "cmake;3.22.1"
-          sdkmanager "platform-tools"
 
       - name: Set NDK environment
         run: |
