@@ -8,9 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout source
         uses: actions/checkout@v4
         with:
+          repository: kuzia15/SAMP-Mobile
           ref: GTA-2.10
 
       - name: Set up JDK 17
@@ -32,7 +33,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Build Release APK
+      - name: Build APK
         run: |
           ./gradlew assembleRelease --stacktrace || ./gradlew assembleDebug --stacktrace
 
