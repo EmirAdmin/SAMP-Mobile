@@ -14,13 +14,24 @@ jobs:
           repository: kuzia15/SAMP-Mobile
           ref: GTA-2.10
 
-      - name: Fix broken repositories
+      - name: Fix repositories (strong method)
         run: |
-          sed -i '/mint.splunk.com/d' build.gradle || true
+          # حذف کامل ریپازیتوری خراب
+          sed -i '/mint.splunk.com/d' build.gradle
           sed -i '/mint.splunk.com/d' app/build.gradle || true
-          if ! grep -q "jitpack.io" build.gradle; then
-            sed -i '/repositories {/a\        maven { url "https://jitpack.io" }' build.gradle
-          fi
+
+          # اضافه کردن JitPack به صورت اجباری در allprojects
+          cat >> build.gradle << 'EOF'
+
+          allprojects {
+              repositories {
+                  google()
+                  mavenCentral()
+                  maven { url 'https://jitpack.io' }
+                  maven { url 'https://maven.aliyun.com/repository/public' }
+              }
+          }
+          EOF
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -28,7 +39,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Android SDK (without default packages)
+      - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
           packages: 'platform-tools'
@@ -50,7 +61,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace
+        run: ./gradlew assembleDebug --stacktrace --info
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
