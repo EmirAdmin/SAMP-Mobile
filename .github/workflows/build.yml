@@ -14,10 +14,16 @@ jobs:
           repository: kuzia15/SAMP-Mobile
           ref: GTA-2.10
 
-      - name: Fix repositories
+      - name: Fix project
         run: |
+          # حذف ریپازیتوری خراب
           sed -i '/mint.splunk.com/d' build.gradle || true
           sed -i '/mint.splunk.com/d' app/build.gradle || true
+
+          # حذف وابستگی مشکل‌دار PRDownloader
+          sed -i '/PRDownloader/d' app/build.gradle || true
+
+          # اضافه کردن ریپازیتوری‌های درست
           printf '\nallprojects {\n    repositories {\n        google()\n        mavenCentral()\n        maven { url "https://jitpack.io" }\n        maven { url "https://maven.aliyun.com/repository/public" }\n    }\n}\n' >> build.gradle
 
       - name: Set up JDK
