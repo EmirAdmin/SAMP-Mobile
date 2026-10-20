@@ -1,6 +1,8 @@
 name: Build SAMP Mobile
+
 on:
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,10 +18,13 @@ jobs:
           # حذف ریپازیتوری خراب
           sed -i '/mint.splunk.com/d' build.gradle || true
           sed -i '/mint.splunk.com/d' app/build.gradle || true
+          
           # حذف وابستگی مشکل‌دار PRDownloader
           sed -i '/PRDownloader/d' app/build.gradle || true
           
-          # فیکس case-sensitive برای playerTabList
+          # ---- فیکس‌های case-sensitive ----
+          
+          # 1. playerTabList
           if [ -f app/src/main/cpp/samp/gui/samp_widgets/playertablist.h ]; then
             mv app/src/main/cpp/samp/gui/samp_widgets/playertablist.h \
                app/src/main/cpp/samp/gui/samp_widgets/playerTabList.h
@@ -27,6 +32,12 @@ jobs:
           if [ -f app/src/main/cpp/samp/gui/samp_widgets/playertablist.cpp ]; then
             mv app/src/main/cpp/samp/gui/samp_widgets/playertablist.cpp \
                app/src/main/cpp/samp/gui/samp_widgets/playerTabList.cpp
+          fi
+          
+          # 2. RGBA.h
+          if [ -f app/src/main/cpp/samp/game/rgba.h ]; then
+            mv app/src/main/cpp/samp/game/rgba.h \
+               app/src/main/cpp/samp/game/RGBA.h
           fi
           
           # اضافه کردن ریپازیتوری‌های درست
