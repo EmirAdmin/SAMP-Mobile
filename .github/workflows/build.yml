@@ -22,7 +22,7 @@ jobs:
           # حذف وابستگی مشکل‌دار PRDownloader
           sed -i '/PRDownloader/d' app/build.gradle || true
           
-          # ---- فیکس case-sensitive (بدون حلقه) ----
+          # ---- فیکس‌های case-sensitive ----
           
           # playerTabList
           if [ -f app/src/main/cpp/samp/gui/samp_widgets/playertablist.h ] && [ ! -e app/src/main/cpp/samp/gui/samp_widgets/playerTabList.h ]; then
@@ -32,9 +32,14 @@ jobs:
             ln -s playertablist.cpp app/src/main/cpp/samp/gui/samp_widgets/playerTabList.cpp
           fi
           
-          # RGBA / rgba  (فقط یک جهت)
+          # RGBA
           if [ -f app/src/main/cpp/samp/game/rgba.h ] && [ ! -e app/src/main/cpp/samp/game/RGBA.h ]; then
             ln -s rgba.h app/src/main/cpp/samp/game/RGBA.h
+          fi
+          
+          # RakNet (پوشه)
+          if [ -d app/src/main/cpp/samp/vendor/raknet ] && [ ! -e app/src/main/cpp/samp/vendor/RakNet ]; then
+            ln -s raknet app/src/main/cpp/samp/vendor/RakNet
           fi
           
           # اضافه کردن ریپازیتوری‌های درست
