@@ -22,22 +22,19 @@ jobs:
           # حذف وابستگی مشکل‌دار PRDownloader
           sed -i '/PRDownloader/d' app/build.gradle || true
           
-          # ---- فیکس‌های case-sensitive با symlink (بهترین روش) ----
+          # ---- فیکس case-sensitive (بدون حلقه) ----
           
           # playerTabList
-          if [ -f app/src/main/cpp/samp/gui/samp_widgets/playertablist.h ]; then
-            ln -sf playertablist.h app/src/main/cpp/samp/gui/samp_widgets/playerTabList.h
+          if [ -f app/src/main/cpp/samp/gui/samp_widgets/playertablist.h ] && [ ! -e app/src/main/cpp/samp/gui/samp_widgets/playerTabList.h ]; then
+            ln -s playertablist.h app/src/main/cpp/samp/gui/samp_widgets/playerTabList.h
           fi
-          if [ -f app/src/main/cpp/samp/gui/samp_widgets/playertablist.cpp ]; then
-            ln -sf playertablist.cpp app/src/main/cpp/samp/gui/samp_widgets/playerTabList.cpp
+          if [ -f app/src/main/cpp/samp/gui/samp_widgets/playertablist.cpp ] && [ ! -e app/src/main/cpp/samp/gui/samp_widgets/playerTabList.cpp ]; then
+            ln -s playertablist.cpp app/src/main/cpp/samp/gui/samp_widgets/playerTabList.cpp
           fi
           
-          # RGBA / rgba
-          if [ -f app/src/main/cpp/samp/game/rgba.h ]; then
-            ln -sf rgba.h app/src/main/cpp/samp/game/RGBA.h
-          fi
-          if [ -f app/src/main/cpp/samp/game/RGBA.h ]; then
-            ln -sf RGBA.h app/src/main/cpp/samp/game/rgba.h
+          # RGBA / rgba  (فقط یک جهت)
+          if [ -f app/src/main/cpp/samp/game/rgba.h ] && [ ! -e app/src/main/cpp/samp/game/RGBA.h ]; then
+            ln -s rgba.h app/src/main/cpp/samp/game/RGBA.h
           fi
           
           # اضافه کردن ریپازیتوری‌های درست
