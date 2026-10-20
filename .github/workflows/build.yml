@@ -37,10 +37,10 @@ jobs:
             ln -s rgba.h app/src/main/cpp/samp/game/RGBA.h
           fi
           
-          # RakNet (پوشه)
-          if [ -d app/src/main/cpp/samp/vendor/raknet ] && [ ! -e app/src/main/cpp/samp/vendor/RakNet ]; then
-            ln -s raknet app/src/main/cpp/samp/vendor/RakNet
-          fi
+          # فیکس اینکلود RakNet → raknet
+          find app/src/main/cpp -type f \( -name "*.h" -o -name "*.cpp" -o -name "*.hpp" \) -exec sed -i 's|vendor/RakNet|vendor/raknet|g' {} +
+          find app/src/main/cpp -type f \( -name "*.h" -o -name "*.cpp" -o -name "*.hpp" \) -exec sed -i 's|"RakNet/|"raknet/|g' {} +
+          find app/src/main/cpp -type f \( -name "*.h" -o -name "*.cpp" -o -name "*.hpp" \) -exec sed -i 's|<RakNet/|<raknet/|g' {} +
           
           # اضافه کردن ریپازیتوری‌های درست
           printf '\nallprojects {\n    repositories {\n        google()\n        mavenCentral()\n        maven { url "https://jitpack.io" }\n        maven { url "https://maven.aliyun.com/repository/public" }\n    }\n}\n' >> build.gradle
